@@ -1,5 +1,23 @@
 syntax on
 
+set clipboard=unnamed
+
+" mappings go here
+
+nnoremap <SPACE> <Nop>
+let mapleader=" "
+
+nmap <S-Enter> O<Esc>
+nmap <CR> o<Esc>
+
+nmap <F8> :TagbarToggle<CR>
+nmap <leader>n :NERDTree<CR>
+
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" mappings end
+
 set noerrorbells
 set smartindent
 set nu
@@ -28,11 +46,6 @@ set colorcolumn=80
 set expandtab
 set viminfo='25,\"50,n~/.viminfo
 
-" indent/unindent with tab/shift-tab
-nmap <Tab> >>
-imap <S-Tab> <Esc><<i
-nmap <S-tab> <<
-
 " mouse
 set mouse=a
 let g:is_mouse_enabled = 1
@@ -53,22 +66,81 @@ endfunction
 set foldmethod=indent
 set foldlevel=99
 
-" file browser
-let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-let NERDTreeMinimalUI = 1
-let g:nerdtree_open = 0
-map <leader>n :call NERDTreeToggle()<CR>
-function NERDTreeToggle()
-    NERDTreeTabsToggle
-    if g:nerdtree_open == 1
-        let g:nerdtree_open = 0
-    else
-        let g:nerdtree_open = 1
-        wincmd p
-    endif
-endfunction
+" Enable folding with the spacebar
+nnoremap <space> za
+
+set nocompatible              " required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" Plugins begin
+Bundle 'Valloric/YouCompleteMe'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'nvie/vim-flake8'
+Plugin 'kien/ctrlp.vim'
+Bundle 'lepture/vim-jinja'
+" Plugins end
+
+" add all your plugins here (note older versions of Vundle
+" used Bundle instead of Plugin)
+
+" ...
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 call plug#begin()
+
+" plugins start
 Plug 'preservim/NERDTree'
+Plug 'tmhedberg/SimpylFold'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'tpope/vim-sensible'
+Plug 'itchyny/lightline.vim'
+Plug 'ap/vim-buftabline'
+Plug 'airblade/vim-gitgutter'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/syntastic'
+Plug 'majutsushi/tagbar'
+Plug 'pangloss/vim-javascript'
+" plugins end
+
+" color schemes start
+Plug 'joshdick/onedark.vim'
+" color schemes end
+
 call plug#end()
+
+" colors
+colorscheme onedark
+
+" autostart plugins
+" autocmd vimenter * NERDTree
+
+let python_highlight_all=1
+syntax on
+
+au BufNewFile, BufRead *.py
+    \  set tabstop=4
+    \  set softtabstop=4
+    \  set shiftwidth=4
+    \  set textwidth=79
+    \  set expandtab
+    \  set autoindent
+    \  set fileformat=unix
+
+au BufNewFile, BufRead *.js,*.html,*.css
+    \  set tabstop=2
+    \  set softtabstop=2
+    \  set shiftwidth=2
 
