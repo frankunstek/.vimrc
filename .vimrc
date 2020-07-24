@@ -172,8 +172,6 @@ map <leader>r :lprev<CR>
 
 " Python start
 
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
 let python_highlight_all=1
 syntax on
 
