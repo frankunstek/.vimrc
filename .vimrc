@@ -8,6 +8,7 @@ set nowrap
 set smartcase
 set noswapfile
 set incsearch
+set smarttab
 
 " ---------------------------------------------------------------
 
@@ -28,9 +29,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " Plugins begin
 Bundle 'Valloric/YouCompleteMe'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'nvie/vim-flake8'
 Plugin 'kien/ctrlp.vim'
+Plugin 'nvie/vim-flake8'
 Bundle 'lepture/vim-jinja'
 " Plugins end
 
@@ -54,7 +54,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'ap/vim-buftabline'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
 " plugins end
@@ -139,9 +138,14 @@ nnoremap <space> za
 
 " Mappings start
 
-" Add new line without entering insert mode
+" Add new line without entering insert mode with Enter
 nmap <S-Enter> O<Esc>
 nmap <CR> o<Esc>
+
+" indent/unindent with tab/shift-tab
+nmap <Tab> >>
+imap <S-Tab> <Esc><<i
+nmap <S-tab> <<
 
 " remaps the leader from backslash to space
 nnoremap <SPACE> <Nop>
@@ -154,19 +158,8 @@ nmap <leader>n :NERDTreeToggle<CR>
 " ycm stuff
 let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
 " Mappings end
-
-" ---------------------------------------------------------------
-
-" syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-map <leader>s :SyntasticCheck<CR>
-map <leader>d :SyntasticReset<CR>
-map <leader>e :lnext<CR>
-map <leader>r :lprev<CR>
 
 " ---------------------------------------------------------------
 
@@ -194,5 +187,20 @@ au BufNewFile, BufRead *.js,*.html,*.css
     \  set shiftwidth=2
 
 " Web end
+
+" ---------------------------------------------------------------
+
+" disable autoindent when pasting text
+" source: https://coderwall.com/p/if9mda/automatically-set-paste-mode-in-vim-when-pasting-in-insert-mode
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+function! XTermPasteBegin()
+    set pastetoggle=<Esc>[201~
+    set paste
+    return ""
+endfunction
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " ---------------------------------------------------------------
