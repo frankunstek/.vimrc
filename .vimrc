@@ -28,10 +28,9 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins begin
+
 Bundle 'Valloric/YouCompleteMe'
-Plugin 'kien/ctrlp.vim'
-Plugin 'nvie/vim-flake8'
-Bundle 'lepture/vim-jinja'
+
 " Plugins end
 
 call vundle#end()            " required
@@ -46,6 +45,9 @@ filetype plugin indent on    " required
 call plug#begin()
 
 " plugins start
+Plug 'lepture/vim-jinja'
+Plug 'nvie/vim-flake8'
+Plug 'kien/ctrlp.vim'
 Plug 'preservim/NERDTree'
 Plug 'tmhedberg/SimpylFold'
 Plug 'vim-scripts/indentpython.vim'
@@ -60,7 +62,12 @@ Plug 'pangloss/vim-javascript'
 
 " color schemes start
 Plug 'joshdick/onedark.vim'
+Plug 'morhetz/gruvbox'
 " color schemes end
+
+" color schemes for lighline start 
+Plug 'shinchu/lightline-gruvbox.vim'
+" color schemes for lightline end
 
 call plug#end()
 
@@ -79,7 +86,10 @@ set t_Co=256
 set t_ut=
 
 " turn on line numbering
-set nu
+" set nu
+
+" turn on relative line numbering
+set relativenumber
 
 " sane text files
 set fileformat=unix
@@ -113,16 +123,25 @@ endfunction
 " ---------------------------------------------------------------
 
 " color scheme
+
+let g:gruvbox_contrast_dark = 'hard'
+if exists('+termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+let g:gruvbox_invert_selection='0'
+
 syntax on
-colorscheme onedark
+colorscheme gruvbox "onedark
+set background=dark
 filetype on
 filetype plugin indent on
 
 " ---------------------------------------------------------------
 
 " lightline
-set noshowmode
-let g:lightline = { 'colorscheme': 'onedark' }
+let g:lightline = {}
+let g:lightline.colorscheme = 'gruvbox'
 
 " code folding
 set foldmethod=indent
@@ -143,9 +162,9 @@ nmap <S-Enter> O<Esc>
 nmap <CR> o<Esc>
 
 " indent/unindent with tab/shift-tab
-nmap <Tab> >>
-imap <S-Tab> <Esc><<i
-nmap <S-tab> <<
+" nmap <Tab> >>
+" imap <S-Tab> <Esc><<i
+" nmap <S-tab> <<
 
 " remaps the leader from backslash to space
 nnoremap <SPACE> <Nop>
@@ -153,11 +172,21 @@ let mapleader=" "
 
 " toggle tagbar and nerdtree
 nmap <F8> :TagbarToggle<CR>
-nmap <leader>n :NERDTreeToggle<CR>
+nmap <F9> :NERDTreeToggle<CR>
 
 " ycm stuff
 let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" auto close brackets etc...
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+inoremap <expr> ) strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
 
 " Mappings end
 
